@@ -33,4 +33,14 @@ print(X)
  [ 1.75]
   [ 0.75]]
 """
+#The same as below:
+a = np.array([[3, 6, -5],
+              [1, -3, 2],
+              [5, -1, 4]])
+b = np.array([12,-2,10])
+
+#  Solving  for  the  variables,  where  we  invert  A
+x = np.linalg.inv(a).dot(b)
+print(x)
+
 
