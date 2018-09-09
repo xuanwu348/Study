@@ -26,7 +26,7 @@ def post(post_id):
     post = Post.query.get_or_404(post_id)
     tags = post.tags
     comments = post.comments.order_by(Comment.date.desc()).all()
-    recent, top_tags = sidebar_data()
+    recent, top_tags = siderbar_data()
 
     return render_template(
             "post.html",
@@ -40,7 +40,7 @@ def post(post_id):
 def tag(tag_name):
     tag = Tag.query.filter_by(title=tag_name).first_or_404()
     posts = tag.posts.order_by(Post.publish_date.desc()).all()
-    recent, top_tags = sidebar_data()
+    recent, top_tags = siderbar_data()
 
     return render_template(
             "tag.html",
@@ -54,7 +54,7 @@ def tag(tag_name):
 def user(username):
     user = user.query.filter_by(username=username).first_or_404()
     posts = user.posts.order_by(Post.publish_date.desc()).all()
-    recent, top_tags = sidebar_data()
+    recent, top_tags = siderbar_data()
     
     return render_template(
             'user.html',
@@ -133,7 +133,7 @@ class Comment(db.Model):
     def __repr__(self):
         return "<comment '{}'>".format(self.text[:15])
 
-def sidebar_data():
+def siderbar_data():
     recent = Post.query.order_by(
                 Post.publish_date.desc()
             ).limit(5).all()
