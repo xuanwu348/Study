@@ -5,5 +5,5 @@ class Proconfig(Config):
     pass
 
 class DevConfig(Config):
-    Debug = True
+    DEBUG = True 
     SQLALCHEMY_DATABASE_URI = "sqlite:///database.db"

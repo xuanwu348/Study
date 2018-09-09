@@ -12,7 +12,7 @@
                 <li>
 		    <a href="{{ url_for('home', page=pagination.prev().page)}}" aria-label="Previous">
 	                <span aria-hidden="true">&laquo;</span>
-		    </a>
+	            </a>
 	        </li>
 	        {% for page in pagination.iter_pages() %}
 		    {% if page %}
