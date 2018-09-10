@@ -1,2 +1,4 @@
 http://getbootstrap.com/
 http://jinja.pocoo.org/docs/2.10/templates/#builtin-filters
+pip install Flask-WTF
+cat /dev/urandom |tr -cd 'a-f0-9'|head -c 32

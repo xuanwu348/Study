@@ -1,5 +1,5 @@
 class Config(object):
-    pass
+    SECRET_KEY = '79ad44ee992827e18c81f34a553a85fb'
 
 class Proconfig(Config):
     pass
