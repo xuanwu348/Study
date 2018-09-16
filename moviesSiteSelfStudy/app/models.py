@@ -18,6 +18,8 @@ class User(db.Model):
     addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     uuid = db.Column(db.String(255), unique=True))
     userlogs = db.relationship("Userlog", backref="user")
+    comments = db.relationship("Comment", backref="user")
+    moviecols = db.relationship("Moviecol", backref="user")
 
     def __repr__(self):
         return "<User %r>" % self.name
@@ -56,12 +58,63 @@ class Movie(db.Model):
     release_time = db.Column(db.Date)
     length = db.Column(db.String(100))
     addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    comments = db.relationship("Comment", backref="movie")
+    moviecols = db.relationship("Moviecol", backref="movie")
 
     def __repr__(self):
         return "<Movie %r>" % self.title
 
+class Preview(db.Model):
+    __tablename__ = "preview"
+    id =db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), unique=True)
+    logo = db.Column(db.String(255), unique=True)
+    addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return "<Preview %r>" self.title
 
 
+class Comment(db.Model):
+    __tablename__ = "comment"
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
+    def __repr__(self):
+        return "<Comment %r>" % self.id
+
+
+class MovieCol(db.Model):
+    __tablename__ = "moviecol"
+    id = db.Column(db.Integer, db.ForeignKey("movie.id"))
+    movie_id = db.Column(db.Integer, db.ForeignKey("movie.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return "<Moviecol %r>" % self.id
+
+class Auth(db.Model):
+    __tablename__ ="auth"
+    id = db.Column(db.Integer,primary_key=True)
+    name = db.Column(db.String(100), unique=True)
+    url = db.Column(db.String(255), unique=True)
+    addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    
+    def __repr__(self):
+        return "<Auth %r>" % self.name
+
+class Role(db.Model):
+    __tablename__ = "role"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True)
+    auths = db.Column(db.String(600))
+    addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return "<Role %r>" % self.name
 
 
