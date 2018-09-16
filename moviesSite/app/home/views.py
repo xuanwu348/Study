@@ -5,8 +5,8 @@ from app.home.forms import RegistForm, LoginForm, UserdetailForm, PwdForm, Comme
 from app.models import User, Userlog, Preview, Tag, Movie, Comment, Moviecol
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
-#from app import db, app, rd
-from app import db, app
+from app import db, app, rd
+#from app import db, app
 from functools import wraps
 import uuid
 import os
@@ -385,7 +385,7 @@ def video(id=None, page=None):
     db.session.commit()
     return render_template("home/video.html", movie=movie, form=form, page_data=page_data)
 
-"""
+
 @home.route("/tm/", methods=["GET", "POST"])
 def tm():
     import json
@@ -428,4 +428,4 @@ def tm():
         resp = json.dumps(res)
         rd.lpush("movie" + str(data["player"]), json.dumps(msg))
     return Response(resp, mimetype='application/json')
-"""
+
