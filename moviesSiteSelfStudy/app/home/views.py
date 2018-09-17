@@ -43,3 +43,6 @@ def moviecol():
 def animation():
     return render_template("home/animation.html")
 
+@home.route("/search")
+def search():
+    return render_template("home/search.html")
