@@ -19,4 +19,12 @@ def logout():
 def pwd():
     return render_template("admin/pwd.html")
 
+@admin.route("/tag/tag_add")
+def tag_add():
+    return render_template("admin/tag_add.html")
+
+@admin.route("/tag/tag_list")
+def tag_list():
+    return render_template("admin/tag_list.html")
+
 
