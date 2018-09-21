@@ -55,7 +55,11 @@ def user_view():
 def comment_list():
     return render_template("admin/comment_list.html")
 
-
 @admin.route("/moviecol/list")
 def moviecol_list():
     return render_template("admin/moviecol_list.html")
+
+@admin.route("/oplog/list/")
+def oplog_list():
+    return render_template("admin/oplog_list.html")
+
