@@ -5,7 +5,7 @@
             <h1>微电影管理系统</h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> 日志管理</a></li>
-                <li class="active">操作日志列表</li>
+                <li class="active">会员登录日志列表</li>
             </ol>
         </section>
         <section class="content" id="showcontent">
@@ -13,7 +13,7 @@
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header">
-                            <h3 class="box-title">操作日志列表</h3>
+                            <h3 class="box-title">会员登录日志列表</h3>
                             <div class="box-tools">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="table_search" class="form-control pull-right"
@@ -31,20 +31,16 @@
                                 <tbody>
                                 <tr>
                                     <th>编号</th>
-                                    <th>管理员</th>
-                                    <th>操作时间</th>
-                                    <th>操作原因</th>
-                                    <th>操作IP</th>
+                                    <th>会员</th>
+                                    <th>登录时间</th>
+                                    <th>登录IP</th>
                                 </tr>
-								{% for i in range(10) %}
                                 <tr>
                                     <td>1</td>
-                                    <td>admin</td>
+                                    <td>张小明</td>
                                     <td>2017-06-01</td>
-                                    <td>添加一个标签：科幻</td>
                                     <td>192.168.4.1</td>
                                 </tr>
-								{% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -64,12 +60,13 @@
             </div>
         </section>
         <!--内容-->
-   {% endblock %}
-   {% block js %}
-   <script>
-       $(document).ready(function(){
-	       $("#g-8").addClass("active");
-		$("#g-8-1").addClass("active");
-	   });
-   </script>
-   {% endblock %}
+    {% endblock%}
+	{% block js %}
+	<script>
+	    $(document).ready(function(){
+		    $("#g-8").addClass("active");
+			$("#g-8-3").addClass("active");
+		    
+		});
+	</script>
+	{% endblock%}
