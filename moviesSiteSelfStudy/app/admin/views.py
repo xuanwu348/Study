@@ -8,12 +8,14 @@ from app.admin.forms import LoginForm
 def index():
     return render_template("admin/index.html")
 
-@admin.route("/login/")
+@admin.route("/login/", methods=["POST", "GET"])
 def login():
     form = LoginForm()
+    if form.validate_on_submit():
+        data = form.data
     return render_template("admin/login.html", form=form)
 
-@admin.route("/logout/")
+@admin.route("/logout/", methods=["POST","GET"])
 def logout():
     return redirect(url_for("admin.login"))
 
