@@ -4,7 +4,7 @@ from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app/MyMovies.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///movie.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATION"] = True
 app.config["SECRET_KEY"] = "38ecd52171d2430b9f44aa03bff03dd2"
 db = SQLAlchemy(app)

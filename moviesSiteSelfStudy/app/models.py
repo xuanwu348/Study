@@ -1,10 +1,10 @@
 # coding:utf8
 
 from datetime import datetime
-#from app import db
+from app import db
 
 
-
+"""
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 #import pymysql
@@ -14,7 +14,7 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///movie.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 db = SQLAlchemy(app)
-
+"""
 
 
 # 会员
@@ -166,7 +166,7 @@ class Admin(db.Model):
         return "<Admin %r>" % self.name
 
     def check_pwd(self, pwd):
-        from werkzeug.security import check_password_hash
+        from werkzeug.security import check_password_hash 
         return check_password_hash(self.pwd, pwd)
 
 
@@ -194,7 +194,7 @@ class Oplog(db.Model):
     def __repr__(self):
         return "<Oplog %r>" % self.id
 
-
+"""
 if __name__ == "__main__":
     db.create_all()
 
@@ -214,4 +214,4 @@ if __name__ == "__main__":
     )
     db.session.add(admin)
     db.session.commit()
-
+"""
