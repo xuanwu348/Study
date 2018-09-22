@@ -1,7 +1,8 @@
-#_*_conding:utf-8_*_
+#coding:utf8_
 
 from . import admin
 from flask import render_template, redirect, url_for
+from app.admin.forms import LoginForm
 
 @admin.route("/")
 def index():
@@ -9,7 +10,8 @@ def index():
 
 @admin.route("/login/")
 def login():
-    return render_template("admin/login.html")
+    form = LoginForm()
+    return render_template("admin/login.html", form=form)
 
 @admin.route("/logout/")
 def logout():
