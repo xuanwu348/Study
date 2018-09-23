@@ -101,7 +101,7 @@ def tag_edit(id):
     if form.validate_on_submit():
         data = form.data
         tag_count = Tag.query.filter_by(name=data["name"]).count()
-        if tag.name == data['name'] and tag_count == 1:
+        if tag.name != data['name'] and tag_count == 1:
             flash("标签名称%s已经存在" % tag.name, "err")
             return redirect(url_for('admin.tag_edit', id=id))
         tag.name = data["name"] 
@@ -145,6 +145,47 @@ def movie_add():
         flash("添加电影%s成功" % data["title"], "OK")
         return redirect(url_for("admin.movie_add")) 
     return render_template("admin/movie_add.html", form = form)
+
+@admin.route("/movie/edit/<int:id>/", methods=["POST", "GET"])
+@admin_login_req
+def movie_edit(id=None):
+    form = MovieForm()
+    form.url.validators = []
+    form.logo.validators = []
+    movie = Movie.query.get_or_404(int(id))
+    if request.method == "GET":
+        form.info.data = movie.info
+        form.tag_id.data = movie.tag_id
+        form.star.data = movie.star
+    if form.validate_on_submit():
+        data = form.data
+        movie_count = Movie.query.filter_by(title=data["title"]).count()
+        if movie_count == 1 and movie.title != data["title"]:
+            flash("片名%s已经存在！" % data["title"], "err")
+            return redirect(url_for("admin.movie_edit",id = id))
+        if not os.path.exists(app.config["UP_DIR"]):
+            os.makedirs(app.config["UP_DIR"])
+            os.chmod(app.config["UP_DIT"], "rw")
+        if form.url.data.filename != "":
+            file_url = secure_filename(form.url.data.filename)
+            url = change_filename(file_url)
+            form.url.data.save(app.config["UP_DIR"] + url)
+        if form.logo.data.filename != "":
+            file_logo = secure_filename(form.logo.data.filename)
+            logo = change_filename(file_logo)
+            form.logo.data.save(app.config["UP_DIR"] + logo)
+        movie.star = data["star"]
+        movie.tag_id = data["tag_id"]
+        movie_info = data["info"]
+        movie.title = data["title"]
+        movie.area = data["area"]
+        movie.length = data["length"]
+        movie.release_time = datetime.datetime(*(tuple(map(int,data["release_time"].split("-")))))
+        db.session.add(movie)
+        db.session.commit()
+        flash("修改电影%s成功" % data["title"], "OK")
+        return redirect(url_for("admin.movie_edit", id = id)) 
+    return render_template("admin/movie_edit.html", form = form, movie = movie)
 
 @admin.route("/movie/list<int:page>", methods=["POST","GET"])
 @admin_login_req
