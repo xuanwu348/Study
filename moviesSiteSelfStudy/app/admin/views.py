@@ -75,6 +75,33 @@ def tag_list(page=None):
             ).paginate(page=page, per_page=10)
     return render_template("admin/tag_list.html", page_data = page_data)
 
+@admin.route("/tag/del/<int:id>", methods=["GET"])
+@admin_login_req
+def tag_del(id=None):
+    tag = Tag.query.filter_by(id=id).first_or_404()
+    db.session.delete(tag)
+    db.session.commit()
+    flash("删除标签%s成功" % tag.name,"OK")
+    return redirect(url_for("admin.tag_list", page=1))
+
+@admin.route("/tag/edit/<int:id>/", methods=["POST", "GET"])
+@admin_login_req
+def tag_edit(id):
+    form = TagForm()
+    tag = Tag.query.get_or_404(id)
+    if form.validate_on_submit():
+        data = form.data
+        tag_count = Tag.query.filter_by(name=data["name"]).count()
+        if tag.name == data['name'] and tag_count == 1:
+            flash("标签名称%s已经存在" % tag.name, "err")
+            return redirect(url_for('admin.tag_edit', id=id))
+        tag.name = data["name"] 
+        db.session.add(tag)
+        db.session.commit()
+        flash("修改标签名%s成功" % tag.name, "OK")
+        return redirect(url_for('admin.tag_add'))
+    return render_template("admin/tag_edit.html", form = form, tag=tag)
+
 @admin.route("/movie/add")
 @admin_login_req
 def movie_add():
