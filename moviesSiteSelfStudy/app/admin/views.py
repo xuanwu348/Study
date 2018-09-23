@@ -2,9 +2,10 @@
 
 from . import admin
 from flask import render_template, redirect, url_for, flash, session, request
-from app.admin.forms import LoginForm
-from app.models import Admin
+from app.admin.forms import LoginForm, TagForm
+from app.models import Admin, Tag 
 from functools import wraps
+from app import db
 
 def admin_login_req(f):
     @wraps(f)
@@ -45,10 +46,24 @@ def logout():
 def pwd():
     return render_template("admin/pwd.html")
 
-@admin.route("/tag/tag_add")
+@admin.route("/tag/tag_add", methods=["POST","GET"])
 @admin_login_req
 def tag_add():
-    return render_template("admin/tag_add.html")
+    form = TagForm()
+    if form.validate_on_submit():
+        data = form.data
+        tag = Tag.query.filter_by(name=data["name"]).count()
+        if tag == 1:
+            flash('名称"%s"已经存在' % data['name'], "err")
+            return redirect(url_for("admin.tag_add"))
+        tag = Tag(
+                name = data["name"]
+                )
+        db.session.add(tag)
+        db.session.commit()
+        flash('标签名"%s"添加成功' % data['name'],"OK")
+        redirect(url_for("admin.tag_add"))
+    return render_template("admin/tag_add.html", form = form)
 
 @admin.route("/tag/tag_list")
 @admin_login_req
