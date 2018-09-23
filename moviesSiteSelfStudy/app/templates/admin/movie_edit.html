@@ -15,7 +15,7 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">编辑电影</h3>
                         </div>
-                        <form role="form" method="post" enctype="multipart/form-data">
+                        <form role="form" method="POST" enctype="multipart/form-data">
                             <div class="box-body">
 				    {% for msg in get_flashed_messages(category_filter=["OK"]) %}
 				    <div class="alert alert-success alert-dismissible">

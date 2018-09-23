@@ -150,8 +150,8 @@ def movie_add():
 @admin_login_req
 def movie_edit(id=None):
     form = MovieForm()
-    form.url.validators = []
-    form.logo.validators = []
+    form.url.validators.clear() #= []
+    form.logo.validators.clear() # = []
     movie = Movie.query.get_or_404(int(id))
     if request.method == "GET":
         form.info.data = movie.info
@@ -166,11 +166,11 @@ def movie_edit(id=None):
         if not os.path.exists(app.config["UP_DIR"]):
             os.makedirs(app.config["UP_DIR"])
             os.chmod(app.config["UP_DIT"], "rw")
-        if form.url.data.filename != "":
+        if form.url.data != "":
             file_url = secure_filename(form.url.data.filename)
             url = change_filename(file_url)
             form.url.data.save(app.config["UP_DIR"] + url)
-        if form.logo.data.filename != "":
+        if form.logo.data != "":
             file_logo = secure_filename(form.logo.data.filename)
             logo = change_filename(file_logo)
             form.logo.data.save(app.config["UP_DIR"] + logo)
