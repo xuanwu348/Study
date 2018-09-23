@@ -146,10 +146,17 @@ def movie_add():
         return redirect(url_for("admin.movie_add")) 
     return render_template("admin/movie_add.html", form = form)
 
-@admin.route("/movie/list")
+@admin.route("/movie/list<int:page>", methods=["POST","GET"])
 @admin_login_req
-def movie_list():
-    return render_template("admin/movie_list.html")
+def movie_list(page = None):
+    if page is None:
+        page = 1
+    page_data = Movie.query.join(Tag).filter(
+            Tag.id == Movie.tag_id
+            ).order_by(
+                    Movie.addtime.desc()
+                    ).paginate(page=page, per_page=10)
+    return render_template("admin/movie_list.html", page_data = page_data)
 
 @admin.route("/preview/add")
 @admin_login_req
