@@ -158,6 +158,15 @@ def movie_list(page = None):
                     ).paginate(page=page, per_page=10)
     return render_template("admin/movie_list.html", page_data = page_data)
 
+@admin.route("/movie/del/<int:id>", methods=["GET"])
+@admin_login_req
+def movie_del(id=None):
+    movie = Movie.query.get_or_404(id)
+    db.session.delete(movie)
+    db.session.commit()
+    flash("删除电影%s成功" % movie.title, "OK")
+    return redirect(url_for("admin.movie_list", page=1))
+
 @admin.route("/preview/add")
 @admin_login_req
 def preview_add():
