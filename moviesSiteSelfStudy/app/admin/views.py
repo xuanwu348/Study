@@ -2,8 +2,8 @@
 
 from . import admin
 from flask import render_template, redirect, url_for, flash, session, request
-from app.admin.forms import LoginForm, TagForm, MovieForm
-from app.models import Admin, Tag, Movie 
+from app.admin.forms import LoginForm, TagForm, MovieForm, PreviewForm
+from app.models import Admin, Tag, Movie, Preview 
 from functools import wraps
 from app import db, app
 from werkzeug.utils import secure_filename
@@ -208,10 +208,27 @@ def movie_del(id=None):
     flash("删除电影%s成功" % movie.title, "OK")
     return redirect(url_for("admin.movie_list", page=1))
 
-@admin.route("/preview/add")
+@admin.route("/preview/add", methods=["GET", "POST"])
 @admin_login_req
 def preview_add():
-    return render_template("admin/preview_add.html")
+    form = PreviewForm()
+    if form.validate_on_submit():
+        data = form.data
+        file_logo = secure_filename(form.logo.data.filename)
+        if not os.path.exists(app.config["UP_DIR"]):
+            os.makedirs(app.config["UP_DIR"])
+            os.chmod(app.config["UP_DIR"], "rw")
+        logo = change_filename(file_logo)
+        form.logo.data.save(app.config["UP_DIR"] + logo)
+        preview = Preview(
+                title = data["title"],
+                logo = logo
+                )
+        db.session.add(preview)
+        db.session.commit()
+        flash("添加预告成功", "OK")
+        return redirect( url_for("admin.preview_add"))
+    return render_template("admin/preview_add.html", form = form)
 
 @admin.route("/preview/list")
 @admin_login_req
