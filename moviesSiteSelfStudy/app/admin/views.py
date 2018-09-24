@@ -249,6 +249,26 @@ def preview_del(id=None):
     flash("删除预告成功", "OK")
     return redirect(url_for("admin.preview_list", page=1))
     
+@admin.route("/preview/edit/<int:id>", methods=["GET", "POST"])
+@admin_login_req
+def preview_edit(id=None):
+    form = PreviewForm()
+    form.logo.validators.clear()
+    preview = Preview.query.get_or_404(id)
+    if request.method == "GET":
+        form.title.data = preview.title
+    if form.validate_on_submit():
+        data = form.data
+        if form.logo.data:
+            file_logo = secure_filename(form.logo.data.filename)
+            preview.logo = change_filename(file_logo)
+            form.logo.data.save(app.config["UP_DIR"] + preview.log)
+        preview.title = data["title"]
+        db.session.add(preview)
+        db.session.commit()
+        flash("修改预告成功", "OK")
+        return redirect(url_for("admin.preview_edit", id=id))
+    return render_template("admin/preview_edit.html", form=form, preview=preview)
 
 @admin.route("/user/list")
 @admin_login_req
