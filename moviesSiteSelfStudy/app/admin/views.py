@@ -240,6 +240,16 @@ def preview_list(page = None):
             ).paginate(page=page, per_page=10)
     return render_template("admin/preview_list.html", page_data=page_data)
 
+@admin.route("/preview/del/<int:id>/", methods=["GET"])
+@admin_login_req
+def preview_del(id=None):
+    preview = Preview.query.get_or_404(id)
+    db.session.delete(preview)
+    db.session.commit()
+    flash("删除预告成功", "OK")
+    return redirect(url_for("admin.preview_list", page=1))
+    
+
 @admin.route("/user/list")
 @admin_login_req
 def user_list():
