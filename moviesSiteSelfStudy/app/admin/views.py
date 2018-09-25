@@ -38,7 +38,7 @@ def login():
         data = form.data
         admin = Admin.query.filter_by(name=data["account"]).first()
         if not admin.check_pwd(data["pwd"]):
-            flash("账号或者密码错误！")
+            flash("账号或者密码错误！","err")
             return redirect(url_for("admin.login"))
         session["admin"] = data["account"]
         return redirect(request.args.get("next") or url_for("admin.index"))
