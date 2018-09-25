@@ -331,6 +331,22 @@ def moviecol_list(page=None):
     ).paginate(page=page, per_page=10)
     return render_template("admin/moviecol_list.html", page_data=page_data)
 
+@admin.route("/movivecol/edit/<int:id>/", methods=["POST", "GET"])
+@admin_login_req
+def moviecol_edit(id=None):
+    moviecol = Moviecol.query.get_or_404(id)
+    if request.method == "GET":
+        pass
+        
+@admin.route("/moviecol/del/<int:id>/", methods=["GET"])
+@admin_login_req
+def moviecol_del(id=None):
+    moviecol = Moviecol.query.get_or_404(id)
+    db.session.delete(moviecol)
+    db.session.commit()
+    flash("删除收藏电影成功", "OK")
+    return redirect(url_for("admin.moviecol_list", page=1))
+
 @admin.route("/oplog/list/")
 @admin_login_req
 def oplog_list():
