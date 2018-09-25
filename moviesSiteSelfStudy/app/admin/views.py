@@ -280,10 +280,20 @@ def user_list(page = None):
             ).paginate(page=page, per_page=10)
     return render_template("admin/user_list.html", page_data = page_data)
 
-@admin.route("/user/view")
+@admin.route("/user/view/<int:id>", methods=["GET"])
 @admin_login_req
-def user_view():
-    return render_template("admin/user_view.html")
+def user_view(id = None):
+    user_data = User.query.get_or_404(id)
+    return render_template("admin/user_view.html", user_data=user_data)
+
+@admin.route("/user/del/<int:id>", methods=["GET"])
+@admin_login_req
+def user_del(id=None):
+    user = User.query.get_or_404(id)
+    db.session.delete(user)
+    db.commit()
+    flash("删除用户%s成功" % user.name, "OK")
+    return redirect(url_for('admin.user_list', page=1))
 
 @admin.route("/comment/list")
 @admin_login_req
