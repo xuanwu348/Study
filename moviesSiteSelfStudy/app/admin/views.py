@@ -291,7 +291,7 @@ def user_view(id = None):
 def user_del(id=None):
     user = User.query.get_or_404(id)
     db.session.delete(user)
-    db.commit()
+    db.session.commit()
     flash("删除用户%s成功" % user.name, "OK")
     return redirect(url_for('admin.user_list', page=1))
 

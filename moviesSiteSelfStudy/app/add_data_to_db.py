@@ -4,7 +4,7 @@ import sqlite3
 conn = sqlite3.connect("movie.db")
 c = conn.cursor()
 
-with open("data_user.txt", "rt") as f:
+with open("data_comments.txt", "rt") as f:
     for line in f.readlines():
         cmd = line % datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(cmd)
