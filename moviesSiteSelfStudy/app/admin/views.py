@@ -47,6 +47,12 @@ def login():
             return redirect(url_for("admin.login"))
         session["admin"] = data["account"]
         session["admin_id"] = admin.id
+        adminlog = Adminlog(
+                admin_id = admin.id,
+                ip = request.remote_addr
+                )
+        db.session.add(adminlog)
+        db.session.commit()
         return redirect(request.args.get("next") or url_for("admin.index"))
     return render_template("admin/login.html", form=form)
 
