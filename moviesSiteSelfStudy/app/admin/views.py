@@ -3,7 +3,7 @@
 from . import admin
 from flask import render_template, redirect, url_for, flash, session, request
 from app.admin.forms import LoginForm, TagForm, MovieForm, PreviewForm
-from app.models import Admin, Tag, Movie, Preview, User, Comment
+from app.models import Admin, Tag, Movie, Preview, User, Comment, Moviecol
 from functools import wraps
 from app import db, app
 from werkzeug.utils import secure_filename
@@ -318,10 +318,18 @@ def comment_del(id=None):
     flash("删除评论成功","OK")
     return redirect(url_for("admin.comment_list",page=1))
 
-@admin.route("/moviecol/list")
+@admin.route("/moviecol/list/<int:page>",methods=["GET"])
 @admin_login_req
-def moviecol_list():
-    return render_template("admin/moviecol_list.html")
+def moviecol_list(page=None):
+    if page is None:
+        page = 1
+    page_data = Moviecol.query.join(User).join(Movie).filter(
+        Movie.id == Moviecol.movie_id,
+        User.id == Moviecol.user_id
+    ).order_by(
+        Moviecol.addtime.desc()
+    ).paginate(page=page, per_page=10)
+    return render_template("admin/moviecol_list.html", page_data=page_data)
 
 @admin.route("/oplog/list/")
 @admin_login_req
