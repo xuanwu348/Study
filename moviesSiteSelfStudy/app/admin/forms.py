@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired, ValidationError
 from app.models import Admin,Tag,Auth
 
 tag = Tag.query.all()
-
+auth_list = Auth.query.all()
 
 class LoginForm(FlaskForm):
     account = StringField(
@@ -292,7 +292,7 @@ class RoleForm(FlaskForm):
               validators = [
                      DataRequired("请选择权限")
               ],
-              choices = [(v.id, v.name) for v in Auth.query.all()],
+              choices = [(v.id, v.name) for v in auth_list],
               coerce = int,
               render_kw = {
                     "class":"form-control"

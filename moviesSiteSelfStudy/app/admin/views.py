@@ -430,13 +430,15 @@ def role_add():
         if role_name_count > 0:
             flash("该角色已经添加","err")
             return redirect(url_for("admin.role_add"))
+        """
         auth_temp = []
         for auth_id in data["auths"]:
             auth = Auth.query.filter(Auth.id==auth_id).first()
             auth_temp.append(auth.name) 
+        """
         role = Role(
             name = data["role_name"],
-            auths =  ",".join(auth_temp)
+            auths =  ",".join(map(str,data["auths"]))
         )
         db.session.add(role)
         db.session.commit()
@@ -453,6 +455,32 @@ def role_list(page=None):
                    Role.addtime.desc()
                    ).paginate(page=page, per_page=10)
     return render_template("admin/role_list.html", page_data = page_data)
+
+@admin.route("/role/del/<int:id>/",methods=["GET"])
+@admin_login_req
+def role_del(id=None):
+    role = Role.query.get_or_404(id)
+    db.session.delete(role)
+    db.session.commit()
+    flash("删除角色成功", "OK")
+    return redirect(url_for("admin.role_list", page=1))
+
+@admin.route("/role/edit/<int:id>/", methods=["GET", "POST"])
+@admin_login_req
+def role_edit(id=None):
+    form = RoleForm()
+    role = Role.query.get_or_404(id)
+    if request.method == "GET":
+        form.auths.data = list(map(int,(role.auths).split(", ")))
+    if form.validate_on_submit():
+        data = form.data
+        role.name = data["role_name"]
+        role.auths = ",".join(map(str,data["auths"]))
+        print(role.auths)
+        db.session.add(role)
+        db.session.commit()
+        flash("修改角色成功！", "OK")
+    return render_template("admin/role_edit.html", form=form, role= role)
 
 @admin.route("/auth/add/", methods=["GET", "POST"])
 @admin_login_req
