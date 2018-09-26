@@ -455,6 +455,31 @@ def auth_list(page=None):
 
     return render_template("admin/auth_list.html", page_data = page_data)
 
+@admin.route("/auth/edit/<int:id>/", methods=["GET", "POST"])
+@admin_login_req
+def auth_edit(id=None):
+    form = AuthForm()
+    form.auth_name.validators.clear()
+    form.auth_url.validators.clear()
+    auth = Auth.query.get_or_404(id)
+    if request.method == "GET":
+        form.auth_name.data = auth.name
+        form.auth_url.data = auth.url
+    if form.validate_on_submit():
+        data = form.data
+        auth_name_count =  Auth.query.filter_by(name = data['auth_name']).count()
+        auth_url_count = Auth.query.filter_by(url = data['auth_url']).count()
+        if auth_name_count > 0 and auth_url_count > 0 and auth.name != data['auth_name'] and auth.url != data['auth_url']:
+            flash("权限名称或者url已经存在","err")
+            return redirect(url_for("admin.auth_edit",id = id))
+        auth.name = data["auth_name"]
+        auth.url = data["auth_url"]
+        db.session.add(auth)
+        db.session.commit()
+        flash("修改权限成功", "OK")
+        return redirect(url_for("admin.auth_list", page=1))    
+    return render_template("admin/auth_edit.html", form=form)
+
 @admin.route("/auth/del/<int:id>/", methods=["GET"])
 @admin_login_req
 def auth_del(id=None):

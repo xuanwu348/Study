@@ -273,10 +273,6 @@ class AuthForm(FlaskForm):
         auth_name_count = Auth.query.filter_by(name=field.data).count()
         if auth_name_count > 0:
             raise ValidationError("输入权限名称重复！")
-    def validate_auth_url(self, field):
-        auth_url_count = Auth.query.filter_by(url=field.data).count()
-        if auth_url_count > 0:
-            raise ValidationError("输入权限地址重复")
 
 
 
