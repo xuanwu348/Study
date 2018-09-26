@@ -1,6 +1,6 @@
 #coding:utf8
 from flask_wtf import  FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, FileField, TextAreaField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, FileField, TextAreaField, SelectField, SelectMultipleField
 from wtforms.validators import DataRequired, ValidationError
 from app.models import Admin,Tag,Auth
 
@@ -13,7 +13,7 @@ class LoginForm(FlaskForm):
             validators = [
                     DataRequired("请输入账号.......")
                 ],
-            description="账号",
+            description= "账号",
             render_kw = {
                    "class":"form-control",
                    "placeholder":"请输入账号！",
@@ -274,6 +274,34 @@ class AuthForm(FlaskForm):
         if auth_name_count > 0:
             raise ValidationError("输入权限名称重复！")
 
-
-
-
+class RoleForm(FlaskForm):
+    role_name = StringField(
+                label = "角色名称",
+                validators = [
+                       DataRequired("请输入角色名称")      
+                    ],
+                description = "角色名称",
+                render_kw = {
+                       "class":"form-control",
+                       "id":"input_name",
+                       "placeholder":"请输入角色名称！"
+                    }
+              )
+    auths = SelectMultipleField(
+              label = "操作权限",
+              validators = [
+                     DataRequired("请选择权限")
+              ],
+              choices = [(v.id, v.name) for v in Auth.query.all()],
+              coerce = int,
+              render_kw = {
+                    "class":"form-control"
+              },
+             description = "添加权限"
+            )
+    submit = SubmitField(
+             "添加",
+             render_kw = {
+                   "class":"btn btn-primary"
+               }
+            )

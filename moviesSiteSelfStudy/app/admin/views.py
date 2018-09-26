@@ -2,8 +2,8 @@
 
 from . import admin
 from flask import render_template, redirect, url_for, flash, session, request
-from app.admin.forms import LoginForm, TagForm, MovieForm, PreviewForm, PwdForm, AuthForm
-from app.models import Admin, Tag, Movie, Preview, User, Comment, Moviecol, Userlog, Oplog, Adminlog, Auth
+from app.admin.forms import LoginForm, TagForm, MovieForm, PreviewForm, PwdForm, AuthForm, RoleForm
+from app.models import Admin, Tag, Movie, Preview, User, Comment, Moviecol, Userlog, Oplog, Adminlog, Auth, Role
 from functools import wraps
 from app import db, app
 from werkzeug.utils import secure_filename
@@ -420,10 +420,29 @@ def userloginlog_list(page=None):
                ).paginate(page=page, per_page=10)
     return render_template("admin/userloginlog_list.html", page_data=page_data)
 
-@admin.route("/role/add")
+@admin.route("/role/add", methods=["GET", "POST"])
 @admin_login_req
 def role_add():
-    return render_template("admin/role_add.html")
+    form = RoleForm()
+    if form.validate_on_submit():
+        data = form.data
+        role_name_count = Role.query.filter_by(name=data["role_name"]).count()
+        if role_name_count > 0:
+            flash("该角色已经添加","err")
+            return redirect(url_for("admin.role_add"))
+        auth_temp = []
+        for auth_id in data["auths"]:
+            auth = Auth.query.filter(Auth.id==auth_id).first()
+            auth_temp.append(auth.name) 
+        role = Role(
+            name = data["role_name"],
+            auths =  ",".join(auth_temp)
+        )
+        db.session.add(role)
+        db.session.commit()
+        flash("添加角色成功!", "OK")
+        return redirect(url_for("admin.role_add"))
+    return render_template("admin/role_add.html", form = form)
 
 @admin.route("/role/list")
 @admin_login_req
