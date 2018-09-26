@@ -561,10 +561,17 @@ def admin_add():
         return redirect(url_for("admin.admin_add"))
     return render_template("admin/admin_add.html", form=form)
 
-@admin.route("/admin/list")
+@admin.route("/admin/list/<int:page>/", methods=["GET"])
 @admin_login_req
-def admin_list():
-    return render_template("admin/admin_list.html")
+def admin_list(page=None):
+    if page is None:
+        page = 1
+    page_data = Admin.query.join(Role).filter(
+            Role.id == Admin.role_id
+            ).order_by(
+                    Admin.addtime.desc()
+                    ).paginate(page=page, per_page=10)
+    return render_template("admin/admin_list.html", page_data=page_data)
 
 
 
