@@ -2,8 +2,8 @@
 
 from . import admin
 from flask import render_template, redirect, url_for, flash, session, request
-from app.admin.forms import LoginForm, TagForm, MovieForm, PreviewForm, PwdForm
-from app.models import Admin, Tag, Movie, Preview, User, Comment, Moviecol, Userlog, Oplog, Adminlog
+from app.admin.forms import LoginForm, TagForm, MovieForm, PreviewForm, PwdForm, AuthForm
+from app.models import Admin, Tag, Movie, Preview, User, Comment, Moviecol, Userlog, Oplog, Adminlog, Auth
 from functools import wraps
 from app import db, app
 from werkzeug.utils import secure_filename
@@ -430,10 +430,21 @@ def role_add():
 def role_list():
     return render_template("admin/role_list.html")
 
-@admin.route("/auth/add/")
+@admin.route("/auth/add/", methods=["GET", "POST"])
 @admin_login_req
 def auth_add():
-    return render_template("admin/auth_add.html")
+    form = AuthForm()
+    if form.validate_on_submit():
+        data = form.data
+        auth = Auth(
+                   name = data["auth_name"],
+                   url = data["auth_url"]
+               )
+        db.session.add(auth)
+        db.session.commit()
+        flash("添加权限成功！", "OK")
+        return redirect(url_for("admin.auth_add"))
+    return render_template("admin/auth_add.html", form = form)
 
 @admin.route("/auth/list/")
 @admin_login_req

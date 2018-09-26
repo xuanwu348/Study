@@ -2,7 +2,7 @@
 from flask_wtf import  FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, FileField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, ValidationError
-from app.models import Admin,Tag
+from app.models import Admin,Tag,Auth
 
 tag = Tag.query.all()
 
@@ -238,8 +238,45 @@ class PwdForm(FlaskForm):
         if not admin.check_pwd(pwd):
             raise ValidationError("旧密码不匹配！")
 
-
-
+class AuthForm(FlaskForm):
+    auth_name = StringField(
+                   label = "权限名称",
+                   validators = [
+                       DataRequired("请输入权限名称")
+                   ],
+                   description = "权限名称",
+                   render_kw = {
+                       "class":"form-control",
+                       " id":"input_name",
+                       " placeholder":"请输入权限名称！"
+                   }
+                )
+    auth_url = StringField(
+                   label = "权限地址",
+                   validators = [
+                       DataRequired("请输入权限地址！")
+                   ],
+                   description = "权限地址",
+                   render_kw = {
+                       "class":"form-control",
+                       "id":"input_url",
+                       "placeholder":"请输入权限地址！"
+                   }
+                )    
+    submit = SubmitField(
+                 "添加",
+                 render_kw = {
+                     "class":"btn btn-primary"
+                 }
+             )
+    def validate_auth_name(self, field):
+        auth_name_count = Auth.query.filter_by(name=field.data).count()
+        if auth_name_count > 0:
+            raise ValidationError("输入权限名称重复！")
+    def validate_auth_url(self, field):
+        auth_url_count = Auth.query.filter_by(url=field.data).count()
+        if auth_url_count > 0:
+            raise ValidationError("输入权限地址重复")
 
 
 
