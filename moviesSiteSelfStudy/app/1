@@ -460,7 +460,7 @@ def auth_list(page=None):
 def auth_del(id=None):
     auth = Auth.query.get_or_404(id)
     db.session.delete(auth)
-    db.session.commit()
+    db.commit(auth)
     flash("删除权限成功","OK")
     return redirect(url_for("admin.auth_list", page=1))
 
