@@ -1,11 +1,12 @@
 #coding:utf8
 from flask_wtf import  FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, FileField, TextAreaField, SelectField, SelectMultipleField
-from wtforms.validators import DataRequired, ValidationError
-from app.models import Admin,Tag,Auth
+from wtforms.validators import DataRequired, ValidationError, EqualTo
+from app.models import Admin,Tag,Auth,Role
 
 tag = Tag.query.all()
 auth_list = Auth.query.all()
+role = Role.query.all()
 
 class LoginForm(FlaskForm):
     account = StringField(
@@ -305,3 +306,76 @@ class RoleForm(FlaskForm):
                    "class":"btn btn-primary"
                }
             )
+
+class AdminForm(FlaskForm):
+    name = StringField(
+            label = "管理员名称",
+            validators = [
+                DataRequired("请输入管理员名称")
+                ],
+            description = "管理员名称",
+            render_kw = {
+                "class":"form-control",
+                "id":"input_name",
+                "placeholder":"请输入管理员名称！"
+                }
+            
+            )
+    pwd = PasswordField(
+            label = "管理员密码",
+            validators = [
+                DataRequired("请输入管理员密码")
+                ],
+            description = "管理员密码",
+            render_kw = {
+                "class":"form-control", 
+                "id":"input_pwd", 
+                "placeholder":"请输入管理员密码！" 
+                }
+            )
+    repwd = PasswordField(
+            label = "管理员重复密码",
+            validators = [
+                DataRequired("请输入管理员重复密码"),
+                EqualTo("pwd", message="两次密码不一致！")
+                ],
+            description = "管理员重复密码",
+            render_kw = {
+                "class":"form-control",
+                "id":"input_pwd",
+                "placeholder":"请输入管理员重复密码！"
+                }
+            )
+    issuper = SelectField(
+            label= "管理员类型",
+            validators = [
+                DataRequired("请选择管理员类型")
+                ],
+            choices = [(1,"超级管理员"),(2,"普通管理员")],
+            coerce = int,
+            description = "管理员类型",
+            render_kw = {
+                "class":"form-control",
+                "id":"input_role_id"
+                }
+            )
+    roleid = SelectField(
+            label = "所属角色",
+            validators = [
+                DataRequired("请选择所属角色")
+                ],
+            choices = [(v.id, v.name) for v in role],
+            coerce = int,
+            description = "所属角色",
+            render_kw = {
+                "class":"form-control",
+                "id":"input_role_id"
+                }
+            )
+    submit = SubmitField(
+            "添加",
+            render_kw = {
+                "class=":"btn btn-primary",
+                }
+            )
+
