@@ -24,6 +24,23 @@ def admin_login_req(f):
         return f(*args, **kwargs)
     return decorated_function 
 
+def admin_auth(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        admin = Admin.query.join(Role).filter(
+                   Admin.id == session["admin-id"],
+                   Admin.role_id == Role.id
+                ).first()
+        auths = admin.role.auths
+        auths_list = list(map(int, auths.split(",")))
+        auth = Auth.query.all()
+        url_list = [v.url for i in auths_list for v in auth if i = v.id]
+        if str(requet.url_rule) not in url_list:
+            abort(404)
+        return f(*args, **kwargs)
+    return decorated_function 
+
+
 def change_filename(filename):
     fileinfo = os.path.splitext(filename)
     filename = datetime.datetime.now().strftime("%Y%m%d%H%M%S") + str(uuid.uuid4().hex) + fileinfo[-1]
