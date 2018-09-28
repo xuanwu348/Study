@@ -1,7 +1,11 @@
 #_*_ encoding:utf-8 _*_
 from . import home
-from flask import render_template, redirect, url_for
-
+from flask import render_template, redirect, url_for, session, flash
+from app.home.form import RegistForm
+import uuid
+from app.models import User
+from werkzeug.security import generate_password_hash
+from app import db
 
 @home.route("/")
 def index():
@@ -15,9 +19,26 @@ def login():
 def logout():
     return redirect(url_for("home.login"))
 
-@home.route("/regist/")
+@home.route("/regist/", methods=["GET","POST"])
 def regist():
-    return render_template("home/regist.html")
+    form = RegistForm()
+    if form.validate_on_submit():
+        data = form.data
+        user = User(
+                name = data["name"],
+                pwd = generate_password_hash(data['pwd']),
+                email = data['email'],
+                phone = data["phone"],
+                uuid = uuid.uuid4().hex,
+                )
+        db.session.add(user)
+        db.session.commit()
+        flash("注册成功！", "OK")
+        session['user'] = data["name"]
+        user_id = User.query.filter_by(name=data['name']).first()
+        session['user_id'] = user_id.id
+        return redirect(url_for('home.user'))
+    return render_template("home/regist.html", form = form)
 
 @home.route("/user/")
 def user():

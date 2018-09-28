@@ -1,7 +1,7 @@
 #coding:utf8
 
 from . import admin
-from flask import render_template, redirect, url_for, flash, session, request
+from flask import render_template, redirect, url_for, flash, session, request, abort
 from app.admin.forms import LoginForm, TagForm, MovieForm, PreviewForm, PwdForm, AuthForm, RoleForm, AdminForm
 from app.models import Admin, Tag, Movie, Preview, User, Comment, Moviecol, Userlog, Oplog, Adminlog, Auth, Role
 from functools import wraps
@@ -28,16 +28,19 @@ def admin_auth(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         admin = Admin.query.join(Role).filter(
-                   Admin.id == session["admin-id"],
+                   Admin.id == session["admin_id"],
                    Admin.role_id == Role.id
                 ).first()
-        auths = admin.role.auths
-        auths_list = list(map(int, auths.split(",")))
-        auth = Auth.query.all()
-        url_list = [v.url for i in auths_list for v in auth if i = v.id]
-        if str(requet.url_rule) not in url_list:
-            abort(404)
-        return f(*args, **kwargs)
+        if admin:
+            auths = admin.role.auths
+            auths_list = list(map(int, auths.split(",")))
+            auth = Auth.query.all()
+            url_list = [v.url for i in auths_list for v in auth if i == v.id]
+            print(url_list, request.url_rule)
+            if str(request.url_rule) not in url_list:
+                abort(404)
+            return f(*args, **kwargs)
+        abort(404)
     return decorated_function 
 
 
@@ -95,8 +98,9 @@ def pwd():
         return redirect(url_for("admin.logout"))
     return render_template("admin/pwd.html", form = form)
 
-@admin.route("/tag/tag_add", methods=["POST","GET"])
+@admin.route("/tag/tag_add/", methods=["POST","GET"])
 @admin_login_req
+@admin_auth
 def tag_add():
     form = TagForm()
     if form.validate_on_submit():
@@ -123,6 +127,7 @@ def tag_add():
 
 @admin.route("/tag/tag_list/<int:page>/", methods=["GET"])
 @admin_login_req
+@admin_auth
 def tag_list(page=None):
     if page is None:
         page = 1
@@ -133,6 +138,7 @@ def tag_list(page=None):
 
 @admin.route("/tag/del/<int:id>", methods=["GET"])
 @admin_login_req
+@admin_auth
 def tag_del(id=None):
     tag = Tag.query.filter_by(id=id).first_or_404()
     db.session.delete(tag)
@@ -149,6 +155,7 @@ def tag_del(id=None):
 
 @admin.route("/tag/edit/<int:id>/", methods=["POST", "GET"])
 @admin_login_req
+@admin_auth
 def tag_edit(id):
     form = TagForm()
     tag = Tag.query.get_or_404(id)

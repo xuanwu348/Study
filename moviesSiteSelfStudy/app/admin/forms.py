@@ -270,10 +270,12 @@ class AuthForm(FlaskForm):
                      "class":"btn btn-primary"
                  }
              )
+    """
     def validate_auth_name(self, field):
         auth_name_count = Auth.query.filter_by(name=field.data).count()
         if auth_name_count > 0:
             raise ValidationError("输入权限名称重复！")
+    """
 
 class RoleForm(FlaskForm):
     role_name = StringField(
