@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, FileField
+from wtforms import StringField, PasswordField, SubmitField, FileField, TextAreaField
 from wtforms.validators import DataRequired, Email, EqualTo, Regexp
 from app.models import User
 
@@ -120,5 +120,18 @@ class LoginForm(FlaskForm):
                    "class":"btn btn-lg btn-success btn-block",
                 }
             )
+
+class UserdetailForm(FlaskForm):
+    name = StringField(
+            label = "昵称",
+
+            )
+    email = StringField()
+    phone = StringField()
+    face = FileField()
+    info = TextAreaField()
+    submit = SubmitField()
+
+
 
 
