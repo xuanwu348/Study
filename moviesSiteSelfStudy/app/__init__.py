@@ -9,6 +9,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///movie.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATION"] = True
 app.config["SECRET_KEY"] = "38ecd52171d2430b9f44aa03bff03dd2"
 app.config["UP_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static/uploads/")
+app.config["FC_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static/uploads/users/")
 db = SQLAlchemy(app)
 from app.home import home as home_blueprint
 from app.admin import admin as admin_blueprint

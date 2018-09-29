@@ -124,13 +124,68 @@ class LoginForm(FlaskForm):
 class UserdetailForm(FlaskForm):
     name = StringField(
             label = "昵称",
-
+            validators = [
+                DataRequired("请输入昵称！")
+                ],
+            description = "昵称",
+            render_kw = {
+                "id":"input_name",
+                "class":"form-control" ,
+                "placeholder":"昵称" 
+                }
             )
-    email = StringField()
-    phone = StringField()
-    face = FileField()
-    info = TextAreaField()
-    submit = SubmitField()
+    email = StringField(
+            label = "邮箱",
+            validators = [
+                DataRequired("请输入邮箱"),
+                Email("邮箱地址不正确！")
+                ],
+            description = "邮箱",
+            render_kw = {
+                "id":"input_email",
+                "class":"form-control",
+                "placeholder":"邮箱"
+                }
+            )
+    phone = StringField(
+            label = "手机",
+            validators = [
+                DataRequired("请输入手机号码"),
+                Regexp("1[3|5|7|8]\\d{9}", message="手机号码格式不对！")
+                ],
+            description = "手机",
+            render_kw = {
+                "id":"input_phone",
+                "class":"form-control" ,
+                "placeholder":"手机"
+                }
+            )
+    face = FileField(
+            label = "头像",
+            validators = [
+                DataRequired("请选择头像文件！")
+                ],
+            description = "头像"
+            )
+    info = TextAreaField(
+            label = "简介",
+            validators = [
+                DataRequired("请输入简介")
+                ],
+            description = "请输入简介",
+            render_kw = {
+                "class":"form-control",
+                "rows":"10",
+                "id":"input_info"
+                }
+            )
+    submit = SubmitField(
+            "保存修改",
+            render_kw = {
+                "class":"btn btn-success",
+                "span class":"glyphicon glyphicon-saved",
+                }
+            )
 
 
 
