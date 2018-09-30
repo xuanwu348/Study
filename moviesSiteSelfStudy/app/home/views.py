@@ -3,7 +3,7 @@ from . import home
 from flask import render_template, redirect, url_for, session, flash, request
 from app.home.form import RegistForm, LoginForm, UserdetailForm, PwdForm
 import uuid
-from app.models import User,Userlog
+from app.models import User, Userlog, Comment, Movie
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 from app import db, app
@@ -151,7 +151,11 @@ def loginlog():
 @home.route("/comments/")
 @user_login_req
 def comments():
-    return render_template("home/comments.html")
+    page_data = Comment.query.join(User).join(Movie).filter(
+                  User.id = session["user_id"],
+                  Movie.id = Comment.movie_id
+              ).paginate(page=page, per_page=10)
+    return render_template("home/comments.html", page_data=page_data)
 
 @home.route("/moviecol")
 def moviecol():
