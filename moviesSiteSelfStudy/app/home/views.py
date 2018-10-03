@@ -3,7 +3,7 @@ from . import home
 from flask import render_template, redirect, url_for, session, flash, request
 from app.home.form import RegistForm, LoginForm, UserdetailForm, PwdForm
 import uuid
-from app.models import User, Userlog, Comment, Movie, Moviecol
+from app.models import User, Userlog, Comment, Movie, Moviecol, Preview
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 from app import db, app
@@ -186,7 +186,8 @@ def moviecol(page=None):
 
 @home.route("/animation/")
 def animation():
-    return render_template("home/animation.html")
+    data = Preview.query.all()
+    return render_template("home/animation.html", data = data)
 
 @home.route("/search")
 def search():
