@@ -148,13 +148,18 @@ def pwd():
 def loginlog():
     return render_template("home/loginlog.html")
 
-@home.route("/comments/")
+@home.route("/comments/<int:page>/")
 @user_login_req
-def comments():
+def comments(page = None):
+    if page is None:
+        page = 1
     page_data = Comment.query.join(User).join(Movie).filter(
-                  User.id = session["user_id"],
-                  Movie.id = Comment.movie_id
-              ).paginate(page=page, per_page=10)
+                  Movie.id == Comment.movie_id,
+                  User.id == session["user_id"]                  
+                  ).order_by(
+                      Comment.addtime.desc()
+                  ).paginate(page=page, per_page=10)
+    print( page_data.items)
     return render_template("home/comments.html", page_data=page_data)
 
 @home.route("/moviecol")
