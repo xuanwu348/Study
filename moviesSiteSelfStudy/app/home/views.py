@@ -143,10 +143,17 @@ def pwd():
         return redirect(url_for("home.login"))
     return render_template("home/pwd.html", form = form)
 
-@home.route("/loginlog/")
+@home.route("/loginlog/<int:page>")
 @user_login_req
-def loginlog():
-    return render_template("home/loginlog.html")
+def loginlog(page = None):
+    if page is None:
+        page = 1
+    page_data = Userlog.query.filter_by(
+        user_id = int(session["user_id"])
+        ).order_by(
+            Userlog.addtime.desc()
+        ).paginate(page=page, per_page=10)
+    return render_template("home/loginlog.html", page_data = page_data)
 
 @home.route("/comments/<int:page>/")
 @user_login_req
@@ -159,7 +166,6 @@ def comments(page = None):
                   ).order_by(
                       Comment.addtime.desc()
                   ).paginate(page=page, per_page=10)
-    print( page_data.items)
     return render_template("home/comments.html", page_data=page_data)
 
 @home.route("/moviecol")
