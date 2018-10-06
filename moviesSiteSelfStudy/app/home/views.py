@@ -1,7 +1,7 @@
 #_*_ encoding:utf-8 _*_
 from . import home
 from flask import render_template, redirect, url_for, session, flash, request
-from app.home.form import RegistForm, LoginForm, UserdetailForm, PwdForm
+from app.home.form import RegistForm, LoginForm, UserdetailForm, PwdForm, CommentForm
 import uuid
 from app.models import User, Userlog, Comment, Movie, Moviecol, Preview, Tag
 from werkzeug.security import generate_password_hash
@@ -251,13 +251,14 @@ def search(page=None):
             ).paginate(page=page, per_page=10)
     return render_template("home/search.html", key=key, page_data=page_data, Movie_count=Movie_count)
 
-@home.route("/play/<int:id>")
+@home.route("/play/<int:id>", methods=["GET", "POST"])
 def play(id = None):
     movie = Movie.query.join(Tag).filter(
         Tag.id == Movie.tag_id,
         Movie.id == int(id)
-        ).first_or_404()    
-    return render_template("home/play.html" , movie = movie)
+        ).first_or_404()
+    form = CommentForm()
+    return render_template("home/play.html" , movie = movie, form = form)
 
 
 

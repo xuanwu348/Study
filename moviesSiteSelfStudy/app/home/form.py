@@ -220,5 +220,30 @@ class PwdForm(FlaskForm):
            }
         )
 
-
+class CommentForm(FlaskForm):
+    content = TextAreaField(
+        label = "内容",
+        validators = [
+                DataRequired("请输入评论内容"),
+            ],
+        description = "内容",
+        render_kw = {
+            "id":"input_content",
+            }
+        )
+    submit_com = SubmitField(
+        "提交评论",
+        render_kw = {
+            "class":"btn btn-success",
+            "id:":"btn-sub",
+            "span class":"glyphicon glyphicon-edit"
+            }
+        )
+    submit_col = SubmitField(
+        "收藏电影",
+        render_kw = {
+            "class":"btn btn-danger",
+            "id":"btn-col",
+            "span class":"glyphicon glyphicon-heart"
+            })
 
