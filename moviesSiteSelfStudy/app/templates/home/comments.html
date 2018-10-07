@@ -18,16 +18,17 @@
             </div>
             <div class="panel-body">
                 <ul class="commentList">
-				{% for v in page_data.items %}
+			{% for v in page_data.items %}
                         <li class="item cl">
-                            {% if v.user.face %}
+			    <a>
                                 <i class="avatar size-L radius">
-                                    <img alt="50x50" src="{{url_for("static",filename="uploads/users/" + v.user.face)}}" class="img-circle" style="border:1px solid #abcdef wodth:50px height:50px;">
-									{% else %}
-									<img alt="50x50" data-src="holder.js/50x50" class="img-circle" style="border:1px solid #abcdef;">
+                               {% if v.user.face %}
+                                    <img alt="50x50" src="{{url_for("static",filename="uploads/users/" + v.user.face)}}" class="img-circle" style="border:1px solid #abcdef;width:50px;">
+					{% else %}
+				<img alt="50x50" data-src="holder.js/50x50" class="img-circle" style="border:1px solid #abcdef;">
+				{% endif %}
                                 </i>
-							{% endif %}
-                            </a>
+			    </a>
                             <div class="comment-main">
                                 <header class="comment-header">
                                     <div class="comment-meta">
@@ -37,7 +38,7 @@
                                     </div>
                                 </header>
                                 <div class="comment-body">
-                                    <p>{{v.content}}</p>
+                                    <p>{{v.content | safe}}</p>
                                 </div>
                             </div>
                         </li>
