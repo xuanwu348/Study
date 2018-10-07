@@ -121,7 +121,7 @@
                     </div>
 					{% endif %}
                     <ol class="breadcrumb" style="margin-top:6px;">
-                        <li>全部评论(5)</li>
+			    <li>全部评论({{movie.commentnum}})</li>
                     </ol>
 					{% if "user" in session %}
                     <form role="form" style="margin-bottom:6px;" method="post">
@@ -138,7 +138,10 @@
 						{{form.csrf_token}}
                         {{form.submit_com}}
                         &nbsp;
-                        {{form.submit_col}}
+			<a class="btn btn-danger" id="btn-col"><span class="glyphicon glyphicon-heart"></span>&nbsp;收藏电影</a>
+			<div>
+				<font style="color:green;" id="show_msg"></font>
+			</div>
                     </form>
 					{% endif %}
                     <ul class="commentList">
@@ -148,6 +151,7 @@
                                 <i class="avatar size-L radius">
 					<img alt="50x50" src="{{ url_for('static', filename='uploads/users/' + v.user.face) }}" class="img-circle" style="border:1px solid #abcdef;width:50px;heigth:50px;">
                                 </i>
+                        {{form.submit_col}}
                             </a>
                             <div class="comment-main">
                                 <header class="comment-header">
@@ -210,5 +214,30 @@ var ue = UE.getEditor('input_content',{
 		width: 774,
 	});
 </script>
+<script>
+    $(document).ready(function(){
+        $("#btn-col").click(function(){
+                var mid = {{ movie.id }};
+            var uid = {{ session['user_id'] }};
+            $.ajax({
+	                url:"{{ url_for('home.moviecol_add') }}",
+	                    type:"GET",
+	                    data:"mid="+mid+"&uid="+uid,
+	                dataType:"json",
+                    success:function(res){
+                        if(res.ok == 1){
+				$("#show_msg").empty();
+				$("#show_msg").append("收藏成功！");
+
+			}else{
+				$("#show_msg").empty();
+				$("#show_msg").append("已经收藏！");
+			}
+		   }
+	   })
+	});
+    });
+</script>
 <!--播放页面-->
 {% endblock %}
+                        {{form.submit_col}}

@@ -215,6 +215,7 @@ def comments(page = None):
     return render_template("home/comments.html", page_data=page_data)
 
 @home.route("/moviecol/<int:page>/")
+@user_login_req
 def moviecol(page=None):
     if page is None:
         page = 1
@@ -229,6 +230,31 @@ def moviecol(page=None):
             Moviecol.addtime.desc()
             ).paginate(page=page, per_page=10)
     return render_template("home/moviecol.html",page_data=page_data)
+
+@home.route("/moviecol/add/", methods=["GET"])
+@user_login_req
+def moviecol_add():
+    uid = request.args.get("uid", "")
+    mid = request.args.get("mid", "")
+    if not uid and not mid:
+        data = dict(ok = 0)
+    else:
+        movie_col = Moviecol.query.filter_by(
+                user_id = int(uid),
+                movie_id = int(mid)
+                ).count()
+        if movie_col == 1:
+            data = dict(ok=0)
+        else:   
+            moviecol = Moviecol(
+                    user_id = int(uid),
+                    movie_id = int(mid)
+                    )
+            db.session.add(moviecol)
+            db.session.commit()
+            data = dict(ok=1)
+    import json
+    return json.dumps(dict(data))
 
 @home.route("/animation/")
 def animation():

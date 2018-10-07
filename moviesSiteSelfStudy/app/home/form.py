@@ -239,11 +239,4 @@ class CommentForm(FlaskForm):
             "span class":"glyphicon glyphicon-edit"
             }
         )
-    submit_col = SubmitField(
-        "收藏电影",
-        render_kw = {
-            "class":"btn btn-danger",
-            "id":"btn-col",
-            "span class":"glyphicon glyphicon-heart"
-            })
 
