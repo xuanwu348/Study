@@ -258,6 +258,18 @@ def play(id = None):
         Movie.id == int(id)
         ).first_or_404()
     form = CommentForm()
+    if "user" in session and form.validate_on_submit():
+        data = form.data
+        comment = Comment(
+                content = data["content"],
+                movie_id = int(id),
+                user_id = session['user_id']
+                )
+        db.session.add(comment)
+        db.session.commit()
+        flash("评论添加成功!", "OK")
+        return redirect(url_for("home.play", id=int(id)))
+
     return render_template("home/play.html" , movie = movie, form = form)
 
 

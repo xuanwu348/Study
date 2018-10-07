@@ -104,6 +104,12 @@
                     <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span>&nbsp;电影评论</h3>
                 </div>
                 <div class="panel-body">
+			{% for msg in get_flashed_messages(category_filter=["OK"]) %}
+			<p style="color:green">{{msg}}</p>
+			{% endfor %}
+			{% for msg in get_flashed_messages(category_filter=["err"]) %}
+			<p style="color:red">{{msg}}</p>
+			{% endfor %}
 				{% if "user" not in session %}
                     <div class="alert alert-danger alert-dismissible" role="alert">
                         <button type="button" class="close" data-dismiss="alert">
@@ -122,6 +128,9 @@
                             <div>
                                 <label for="input_content">{{form.content.label}}</label>
                                 {{form.content}}
+				{% for err in form.content.errors %}
+				<div class="col-md-12"><font style="color:red;">{{err}}</font></div>
+				{% endfor %}
                             </div>
                             <div class="col-xs-12" id="error_content"></div>
                         </div>
