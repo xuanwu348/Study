@@ -203,7 +203,6 @@ def loginlog(page = None):
     return render_template("home/loginlog.html", page_data = page_data)
 
 @home.route("/comments/<int:page>/")
-@user_login_req
 def comments(page = None):
     if page is None:
         page = 1
@@ -251,12 +250,17 @@ def search(page=None):
             ).paginate(page=page, per_page=10)
     return render_template("home/search.html", key=key, page_data=page_data, Movie_count=Movie_count)
 
-@home.route("/play/<int:id>", methods=["GET", "POST"])
-def play(id = None):
+@home.route("/play/<int:id>/<int:page>", methods=["GET", "POST"])
+def play(id = None, page = None):
+    if page is None:
+        page = 1
     movie = Movie.query.join(Tag).filter(
         Tag.id == Movie.tag_id,
         Movie.id == int(id)
         ).first_or_404()
+    movie.playnum = movie.playnum + 1
+    db.session.add(movie)
+    db.session.commit()
     form = CommentForm()
     if "user" in session and form.validate_on_submit():
         data = form.data
@@ -266,11 +270,17 @@ def play(id = None):
                 user_id = session['user_id']
                 )
         db.session.add(comment)
+        movie.commentnum = movie.commentnum + 1
         db.session.commit()
         flash("评论添加成功!", "OK")
-        return redirect(url_for("home.play", id=int(id)))
-
-    return render_template("home/play.html" , movie = movie, form = form)
+        return redirect(url_for("home.play", id=int(id), page=page))
+    page_data = Comment.query.join(Movie).join(User).filter(
+                Comment.movie_id == int(id),
+                User.id == Comment.user_id
+            ).order_by(
+                    Comment.addtime.desc()
+                    ).paginate(page=page, per_page=10)
+    return render_template("home/play.html" , movie = movie, form = form, page_data = page_data)
 
 
 
