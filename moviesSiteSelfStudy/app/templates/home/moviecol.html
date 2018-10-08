@@ -17,7 +17,7 @@
             <div class="panel-body">
                 <div class="col-md-12">
 		   {% for v in page_data.items %}
-                    <div class="media">
+                    <div class="media" style="height:200px;overflow:scroll;">
                         <div class="media-left">
                             <a href="{{url_for('home.play', id=v.movie.id, page=1)}}">
                                 <img class="media-object" src="{{ url_for('static', filename='uploads/' + v.movie.logo) }}" alt="{{v.movie.title}}">

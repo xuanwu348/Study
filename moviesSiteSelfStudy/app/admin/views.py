@@ -237,7 +237,7 @@ def movie_edit(id=None):
             form.logo.data.save(app.config["UP_DIR"] + logo)
         movie.star = data["star"]
         movie.tag_id = data["tag_id"]
-        movie_info = data["info"]
+        movie.info = data["info"]
         movie.title = data["title"]
         movie.area = data["area"]
         movie.length = data["length"]
