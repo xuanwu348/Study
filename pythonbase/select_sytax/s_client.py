@@ -9,3 +9,4 @@ while True:
     s.send(data)
     recv_data = s.recv(1024)
     print("recv: %s" % recv_data.decode("utf-8"))
+s.close()
