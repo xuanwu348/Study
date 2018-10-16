@@ -1,0 +1,4 @@
+sudo pip install pika
+sudo apt install erlang
+sudo apt-get install rabbitmq-server
+(Linux raspberrypi 4.9.80-v7+ #1098 SMP Fri Mar 9 19:11:42 GMT 2018 armv7l GNU/Linux)
