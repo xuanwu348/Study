@@ -32,7 +32,9 @@ class FibnacciRPCClient(object):
                                    body=command)
         while self.response is None:
             self.connection.process_data_events()
-        return self.response.decode("utf-8")
+            if self.response:
+                print(self.response.decode("utf-8"))
+        #return self.response.decode("utf-8")
 while 1:
     fibonacci_rpc = FibnacciRPCClient()
     command = input("please input a command:")
@@ -44,6 +46,6 @@ while 1:
         command = command
     print("[x] Send command {}".format(command))
     response = fibonacci_rpc.call(command)
-    print("[.]Got\n %s" % response)
+    #print("[.]Got\n %s" % response)
             
                                    
