@@ -1,6 +1,8 @@
 #encoding:utf-8
 from fabric import task, Config, Connection
+import getpass
 
+password = getpass.getpass("what's your password:")
 host = "10.240.109.121"
 config = Config()
 conf_dict = {
@@ -8,7 +10,7 @@ conf_dict = {
             "port":22,
             "connect_kwargs":{"password":"intel123"},
             "timeouts":{"connect":5},
-            "sudo":{'user':None, "prompt":"\\[sudo\\] password for hddl:", "password":"intel123"}
+            "sudo":{'user':None, "prompt":"\\[sudo\\] password for hddl:", "password":password}
          } 
 config.update(conf_dict)
 
