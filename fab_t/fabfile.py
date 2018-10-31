@@ -5,6 +5,7 @@ import getpass
 
 
 password = getpass.getpass("what's your password:")
+key_filename = "./Identity"
 host = "10.240.109.121"
 user = "hddl"
 port = 22
@@ -17,7 +18,9 @@ def update_c_config(connect):
            "user":user,
            "port":port,
            "connect_timeout":timeout,
-           "connect_kwargs":{"password": password}
+           "connect_kwargs":{"password": password
+                             #"key_filename": key_filenam
+                             }
         }
     for k, v in conf.items():
         if hasattr(connect, k):
