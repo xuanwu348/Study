@@ -1,0 +1,6 @@
+2018-11-02 15:13:05,017-__main__-ERROR-error message
+2018-11-02 15:13:05,018-__main__-CRITICAL-critical message
+2018-11-02 15:15:18,034-__main__ ['ERROR'] error message
+2018-11-02 15:15:18,034-__main__ ['CRITICAL'] critical message
+2018-11-02 15:16:03,602-__main__ [ERROR] error message
+2018-11-02 15:16:03,604-__main__ [CRITICAL] critical message

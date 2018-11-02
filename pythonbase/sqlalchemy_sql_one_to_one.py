@@ -1,6 +1,6 @@
 #encoding:utf-8
 from sqlalchemy import Column, Integer, String, ForeignKey, create_engine, MetaData
-from sqlalchemy.orm import relationship, sessionmaker
+from sqlalchemy.orm import relationship, sessionmaker, backref
 from sqlalchemy.ext.declarative import declarative_base
 
 engine = create_engine("sqlite:///./one2one.db", echo=True)
@@ -10,7 +10,8 @@ class Addr(Base):
     __tablename__ = "addr"
     id = Column(Integer, primary_key=True)
     addr = Column(String(30))
-    paddr = relationship("Person", uselist=False, backref="addr")
+    #paddr = relationship("Person", backref=backref("addr",uselist=False))
+    paddr = relationship("Person", uselist=False,backref="addr")
 
     def __repr__(self):
         return "<name %s>" % self.name
