@@ -1,0 +1,9 @@
+2018-11-03 02:49:25,924-util.log_module [ERROR] error message
+2018-11-03 02:49:25,925-util.log_module [CRITICAL] critical message
+2018-11-03 02:49:25,926-__main__ [ERROR] other module error message
+2018-11-03 02:49:47,313-util.log_module [ERROR] error message
+2018-11-03 02:49:47,313-util.log_module [CRITICAL] critical message
+2018-11-03 02:49:47,314-__main__ [ERROR] other module error message
+2018-11-03 02:49:51,496-util.log_module [ERROR] error message
+2018-11-03 02:49:51,497-util.log_module [CRITICAL] critical message
+2018-11-03 02:49:51,497-__main__ [ERROR] other module error message
