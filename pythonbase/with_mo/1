@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "first.py", line 39, in <module>
+    raise IndexError("sssssssss")
+IndexError: sssssssss

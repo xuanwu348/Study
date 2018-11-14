@@ -1,0 +1,25 @@
+[32mResource [Normal][0m
+[33m[Enter Normal]: Allocate resource.
+hererere.......
+(None, None, None)
+[31m[Exit Normal]: Free resource.[0m
+[31m[Exit Normal]: Exited without exception.[0m
+*************************
+[32mResource [Normal][0m
+[33m[Enter Normal]: Allocate resource.
+[Fun_test] Normal
+hererere.......
+(None, None, None)
+[31m[Exit Normal]: Free resource.[0m
+[31m[Exit Normal]: Exited without exception.[0m
+*************************
+[32mResource [Normal][0m
+[33m[Enter Normal]: Allocate resource.
+hererere.......
+(<type 'exceptions.IndexError'>, IndexError('sssssssss',), <traceback object at 0x76ab9a80>)
+[31m[Exit Normal]: Free resource.[0m
+[31m[Exit Normal]: Exited with exception raised.
+Traceback (most recent call last):
+  File "first.py", line 39, in <module>
+    raise IndexError("sssssssss")
+IndexError: sssssssss
