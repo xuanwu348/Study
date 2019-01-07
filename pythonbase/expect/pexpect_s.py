@@ -4,10 +4,7 @@ import getpass
 try:
     import pexpect as expect
 except ImportError as e:
-    status = os.system("echo xxx|sudo -s apt install pexpect")
-    if status != 0:
-        print(e)
-        exit()
+    print("Please install pexpect(sudo pip3 install pexpect)")
 
 hostname = "192.168.1.106"
 #password = getpass.getpass()
