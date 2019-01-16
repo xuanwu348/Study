@@ -1,0 +1,10 @@
+In __enter__()
+/home/pi/git
+Sample:<__main__.Sample instance at 0x76a94b20>
+Do some Func in point path
+in with /home/pi/git 
+Sample function
+In __exit__()
+/home/pi/git/master/Study/pythonbase/with_mo
+----------------------------------------
+/home/pi/git/master/Study/pythonbase/with_mo
