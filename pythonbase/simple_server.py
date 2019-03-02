@@ -9,7 +9,7 @@ app = Flask(__name__)
 namelists = {}
 for dirname, temp, filenames in os.walk("./"):
     for name in filenames:
-        if name.endswith(("mp4","pdf","txt","docx","doc","jpg","bmp","png")):
+        if name.endswith(("mp4","pdf","txt","docx","doc","jpg","bmp","png","log")):
             temp_path = os.path.join(dirname, name).replace("\\", "/") if sys.platform == "win32" else os.path.join(dirname, name)              
             if name in namelists.keys():
                 namelists[name + str(random.randint(0,9))] = temp_path
@@ -25,9 +25,12 @@ def index():
 
 @app.route("/<string:name>", methods=["GET"])
 def sendFile(name):
-    if os.path.isfile(namelists[name]):
-        return send_from_directory("./", namelists[name], as_attachment=True)
+    try:
+        if os.path.isfile(namelists[name]):
+            return send_from_directory("./", namelists[name], as_attachment=True)
+    except KeyError:
+        pass
     abort(404)
     
 if __name__ == "__main__":
-    app.run(("0.0.0.0"),debug = True)
+    app.run(("0.0.0.0"),debug = False)
